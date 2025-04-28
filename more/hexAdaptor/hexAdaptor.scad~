@@ -1,0 +1,59 @@
+height = 15;
+dOut = 39;
+dIn = 35;
+doCenter = false;
+
+module outerHex(height)
+{
+    cylinder(d=dOut, h=height, center = doCenter, $fn=6);
+}
+module innerHex()
+{
+    cylinder(d=dIn, h=2*height+1, center = true, $fn=6);
+}
+module outerRounding()
+{
+	difference()
+	{
+	    cylinder(d=dOut* 1.01,h=2*height+1, center = true);
+	    cylinder(d=dOut * 0.992,h=2*height+2, center = true);
+	}
+}
+
+module innerRounding()
+{
+    for (i = [0 : 1 : 5]) 
+    {
+        size = .02 * dIn;
+        translate((dIn - 2.7*size)/2*[cos(i*60),sin(i*60)])
+       {
+           cylinder(d=dIn* 0.05,h=2*height+2, center = true, $fn=64);
+       }
+    }
+}
+module bottomSupport()
+{
+    difference()
+    {
+        outerHex(3);
+        cylinder(d=dIn * 0.8,h=2*height+2, center = true, $fn=128);
+    }
+}
+
+
+
+union()
+{
+    difference()
+    {
+        outerHex(height);
+        innerHex();
+        outerRounding();    
+        innerRounding();
+    }
+    difference()
+    {
+        bottomSupport();
+        outerRounding();    
+    }
+}

@@ -1,0 +1,1 @@
+import("david1.3mf", convexity=3);
